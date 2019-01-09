@@ -42,15 +42,19 @@ const afterOpen = (db) => {
     console.log('connected');
   });
   const dbObj = await afterOpen(db);
-  
+  const cols = dbObj.cols;
+
+  cols.forEach((col, index, cols) => {
+    if (col.s.name === collectionName + 's' || col.s.name === collectionName ) {
+      const data=col.rename(col.s.name + new Date().getTime());
+    }
+  })
+
   const Schema = new mongoose.Schema(schemaObj);
   const Model = mongoose.model(collectionName, Schema);
   
-  // fileDatas.forEach((filedata,index,filedatas) => {
-  //   let model = new Model(filedata);
-  //   model.save();
-  // })
-  // Model.find({}, (err,data) => {
-  //   console.log(data);
-  // })
+  fileDatas.forEach((filedata,index,filedatas) => {
+    let model = new Model(filedata);
+    model.save();
+  })
 })()
