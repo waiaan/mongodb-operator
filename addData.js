@@ -1,33 +1,10 @@
-const fs = require('fs');
 const mongoose = require('mongoose');
+const { getDataType, readFile, afterOpen } = require('./utils');
+
 const filePath = process.argv[2];
 const databaseName = process.argv[3];
 const collectionName = process.argv[4];
 
-const getDataType = (data) => {
-  const str = Object.prototype.toString.call(data);
-  return Object.prototype.toString.call(str).split(' ')[1].split(']')[0]
-}
-const readFile = (path) => {
-  return new Promise((res,rej) => {
-    fs.readFile(path,(err,data) => {
-      if (err) {
-        rej(err);
-      } else {
-        res(data.toString());
-      }
-    })
-  })
-}
-const afterOpen = (db) => {
-  return new Promise((res,rej) => {
-    db.on('open', async () => {
-      res({
-        cols:await db.db.collections()
-      })
-    })
-  })
-}
 (async () => {
   let fileDatas = await readFile(filePath);
   fileDatas = JSON.parse(fileDatas);
@@ -44,13 +21,13 @@ const afterOpen = (db) => {
   const cols = dbObj.cols;
 
   cols.forEach((col, index, cols) => {
-    if (col.s.name === collectionName + 's' || col.s.name === collectionName ) {
-      const data=col.rename(col.s.name + new Date().getTime());
+    if (col.s.name === collectionName ) {
+      col.rename(col.s.name + new Date().getTime());
     }
   })
 
   const Schema = new mongoose.Schema(schemaObj);
-  const Model = mongoose.model(collectionName, Schema);
+  const Model = mongoose.model(collectionName, Schema,collectionName);
   
   fileDatas.forEach((filedata,index,filedatas) => {
     let model = new Model(filedata);
