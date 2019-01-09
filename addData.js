@@ -1,6 +1,5 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
-console.log(process.argv);
 const filePath = process.argv[2];
 const databaseName = process.argv[3];
 const collectionName = process.argv[4];
