@@ -1,35 +1,35 @@
 # mongodb-operator
 
-### before use:
+#### before use:
 ```js
 npm install mongoose --save
 ```
 
 ## addData.js
 read a file and add its content to mongodb database
-### usage
+#### usage
 ```js
 node .\addData.js <filepath> <database name> <collection name>
 ```
-### example
+#### example
 ```js
 node .\addData.js C:\Users\Administrator\Desktop\users.json blog user
 ```
 
 ## server.js
 create a HTTP Sever for mongodb database
-### usage
+#### usage
 ```js
 node .\server.js <path of databaseConfig.js>
 ```
-### example
+#### example
 ```js
 node .\server.js C:\Users\Administrator\Desktop\databaseConfig.js
 ```
 
 ## databaseConfig.js
 file created for the config of server.js on your own
-### example
+#### example
 ```js
 module.exports = {
   port: 8080,                            //running port for server
