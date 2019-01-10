@@ -24,6 +24,7 @@ const { afterOpen } = require('./utils');
 
   http.createServer(async (req, res) => {
     const handleReqUrl = reqUrlMethods[req.url];
+    res.setHeader('Access-Control-Allow-Origin','*')
     if (handleReqUrl) {
       console.log(1);
       const data = await handleReqUrl(Model);
