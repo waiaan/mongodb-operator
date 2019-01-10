@@ -26,7 +26,6 @@ const { afterOpen } = require('./utils');
     const handleReqUrl = reqUrlMethods[req.url];
     res.setHeader('Access-Control-Allow-Origin','*')
     if (handleReqUrl) {
-      console.log(1);
       const data = await handleReqUrl(Model);
       res.end(JSON.stringify(data));
     }
