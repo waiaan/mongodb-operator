@@ -12,24 +12,37 @@ const { afterOpen } = require('./utils');
   const Model = mongoose.model(cols, Schema, cols);
 
   db.on('connected', (err) => {
-    if (err) return console.log('connected: ',err);
+    if (err) return console.log('connected: ', err);
     console.log('connected');
   });
   db.on('open', (err) => {
     if (err) return console.log('open: ', err);
     console.log('open');
   })
-  
 
 
-  http.createServer(async (req, res) => {
-    const handleReqUrl = reqUrlMethods[req.url];
-    res.setHeader('Access-Control-Allow-Origin','*')
-    if (handleReqUrl) {
-      const data = await handleReqUrl(Model);
-      res.end(JSON.stringify(data));
-    }
 
+  http.createServer((req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
+    req.on('end', async () => {
+      const handleReqUrl = reqUrlMethods[req.url];
+      if (handleReqUrl) {
+        let data = '';
+        if (body==='') {
+          data = await handleReqUrl(Model);
+        } else {
+          data = await handleReqUrl(Model,JSON.parse(body));
+        }
+        res.end(JSON.stringify(data));
+      } else {
+        res.end();
+      }
+    })
   }).listen(port);
 
 })()
