@@ -43,6 +43,10 @@ module.exports = {
       const data = await model.find();
       return data;
     },
+    '/saveUser': async (...args) => {
+      const data = await args[0].create(args[1]);
+      return data;
+    }
   }
 }
 ```
